@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
   <title>ID Card Studio | Employee Card Generator</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=DM+Sans:wght@300;400;500;600;700&family=Roboto:wght@400;700;900&family=Montserrat:wght@400;700;800&family=Oswald:wght@400;700&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <style>
@@ -76,6 +76,21 @@
       padding: 4px 12px;
       border-radius: 20px;
     }
+    .header-nav-btn {
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.25);
+      color: #fff;
+      padding: 7px 16px;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      transition: background 0.18s;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .header-nav-btn:hover { background: rgba(255,255,255,0.22); }
+    .header-nav-btn.active { background: var(--bise-gold); color: #1a2636; border-color: var(--bise-gold); }
     /* ── LAYOUT ── */
     .app-container { max-width: 1300px; margin: 0 auto; padding: 24px 20px; }
     .main-grid {
@@ -128,7 +143,7 @@
       background: var(--surface);
       transition: border-color 0.2s, box-shadow 0.2s;
     }
-    input[type=text]:focus, textarea:focus {
+    input[type=text]:focus, textarea:focus, select:focus {
       outline: none;
       border-color: var(--primary-light);
       box-shadow: 0 0 0 3px rgba(42,95,138,0.12);
@@ -318,6 +333,10 @@
       -webkit-print-color-adjust: exact;
       print-color-adjust: exact;
       position: relative;
+      --card-font-size: 0.78rem;
+      --card-name-size: 0.85rem;
+      --card-title-size: 1rem;
+      --card-font-family: 'DM Sans', sans-serif;
     }
     .id-card.landscape { width: 330px; height: 210px; display: flex; flex-direction: column; }
     .id-card.portrait  { width: 265px; height: 415px; display: flex; flex-direction: column; }
@@ -332,8 +351,13 @@
       display: flex; align-items: center; justify-content: center;
     }
     .c-logo img { width: 100%; height: 100%; object-fit: contain; }
-    .c-header-text h2 { font-size: 1rem; font-weight: 800; line-height: 1.2; }
-    .c-header-text p  { font-size: 0.50rem; opacity: 0.85; margin-top: 1px; }
+    .c-header-text h2 { 
+      font-size: var(--card-title-size); 
+      font-weight: 800; 
+      line-height: 1.2; 
+      font-family: var(--card-font-family);
+    }
+    .c-header-text p  { font-size: 0.50rem; opacity: 0.85; margin-top: 1px; font-family: var(--card-font-family); }
     .c-body { flex: 1; display: flex; padding: 9px 10px; gap: 10px; overflow: hidden; min-height: 0; }
     .portrait .c-body { flex-direction: column; align-items: center; }
     .c-photo {
@@ -350,19 +374,22 @@
     }
     .c-info { flex: 1; display: flex; flex-direction: column; justify-content: center; }
     .c-card-title {
-      font-size: 0.85rem; font-weight: 800;
+      font-size: var(--card-name-size); font-weight: 800;
       letter-spacing: 1.2px; text-transform: uppercase;
       margin-bottom: 5px;
+      font-family: var(--card-font-family);
     }
     .c-table { width: 100%; border-collapse: collapse; }
     .c-table tr td {
-      font-size: 0.78rem; padding: 2px 0; vertical-align: top; line-height: 1.45; font-weight: 500;
+      font-size: var(--card-font-size); padding: 2px 0; vertical-align: top; line-height: 1.45; font-weight: 500;
+      font-family: var(--card-font-family);
     }
     .c-table tr td:first-child { font-weight: 900; width: 34%; padding-right: 4px; white-space: nowrap; }
     .c-footer {
       display: flex; align-items: center; justify-content: space-between;
       padding: 5px 11px; flex-shrink: 0;
       font-size: 0.72rem; min-height: 28px; font-weight: 700;
+      font-family: var(--card-font-family);
     }
     .c-footer-school { flex: 1; line-height: 1.3; font-weight: 600; }
     .c-sig { display: flex; flex-direction: column; align-items: center; gap: 1px; }
@@ -374,6 +401,7 @@
     .terms-list li {
       font-size: 0.68rem; padding: 3px 0 3px 14px; font-weight: 500;
       position: relative; border-bottom: 1px dotted rgba(0,0,0,0.1);
+      font-family: var(--card-font-family);
     }
     .terms-list li::before { content: '›'; position: absolute; left: 3px; font-weight: bold; }
     /* ════════════════════════════════════
@@ -388,7 +416,7 @@
       background: linear-gradient(110deg, var(--bise-green-dark) 0%, var(--bise-green) 100%);
       border-bottom: 2.5px solid var(--bise-gold);
     }
-    .design-bise .c-header-text h2 { color: #ffffff; font-family: 'Playfair Display', serif; font-size: 0.78rem; font-weight: 800; }
+    .design-bise .c-header-text h2 { color: #ffffff; font-family: 'Playfair Display', serif; font-size: var(--card-title-size); font-weight: 900; letter-spacing: 0.5px; text-transform: uppercase; }
     .design-bise .c-header-text p  { color: #b8e8c4; }
     .design-bise .c-logo { background: rgba(255,255,255,0.12); border: 1.5px solid var(--bise-gold); }
     .design-bise .c-card-title { color: var(--bise-gold); }
@@ -450,10 +478,112 @@
     .design-darktech .c-table tr td:first-child { color: #00c4e8; }
     .design-darktech .c-footer { background: #0b111f; color: #6ac4e0; border-top: 1px solid #00b4d8; }
     .design-darktech .c-qr { background: #0b111f; border: 1px solid #00b4d8; }
+    /* ════ SETTINGS PAGE ════ */
+    .settings-page { display: none; }
+    .settings-page.active { display: block; }
+    .app-main-page.hidden { display: none; }
+    .settings-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+    @media (max-width: 900px) { .settings-grid { grid-template-columns: 1fr; } }
+    .settings-section {
+      background: var(--surface);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      margin-bottom: 24px;
+    }
+    .settings-section-header {
+      padding: 14px 20px;
+      font-weight: 700;
+      font-size: 0.8rem;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      color: var(--primary);
+      background: var(--surface2);
+      border-bottom: 1px solid var(--border);
+    }
+    .settings-section-body { padding: 20px; }
+    .settings-field { margin-bottom: 16px; }
+    .settings-field label {
+      display: block;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+    }
+    .settings-field input[type=range] { width: 100%; accent-color: var(--primary); }
+    .settings-field .range-val {
+      display: inline-block;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 2px 8px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin-left: 8px;
+    }
+    .color-input-row {
+      display: flex; align-items: center; gap: 10px;
+    }
+    .color-input-row input[type=color] {
+      width: 44px; height: 36px;
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      cursor: pointer;
+      padding: 2px;
+      background: var(--surface);
+    }
+    .color-input-row input[type=text] {
+      flex: 1;
+    }
+    .font-preview-box {
+      background: var(--surface2);
+      border: 1px dashed var(--border);
+      border-radius: 10px;
+      padding: 14px;
+      text-align: center;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin-top: 6px;
+    }
+    .settings-actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 10px;
+      flex-wrap: wrap;
+    }
+    .btn-settings {
+      padding: 10px 24px;
+      border: none;
+      border-radius: 10px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      transition: all 0.15s;
+    }
+    .btn-settings-primary {
+      background: var(--primary);
+      color: white;
+    }
+    .btn-settings-primary:hover { background: var(--primary-light); }
+    .btn-settings-secondary {
+      background: var(--surface2);
+      color: var(--text-muted);
+      border: 1px solid var(--border);
+    }
+    .btn-settings-secondary:hover { background: var(--border); }
     /* ════ PRINT ════ */
     @media print {
       body { background: white; }
-      .app-header, .left-panel, .preview-section, .print-bar, .panel-header { display: none !important; }
+      .app-header, .left-panel, .preview-section, .print-bar, .panel-header, .app-footer, .header-nav-btn { display: none !important; }
       .main-grid { display: block; }
       .right-panel-inner { padding: 0; }
       .cards-grid { display: block; }
@@ -536,9 +666,15 @@
     <h1>ID Card Studio</h1>
     <p>Employee Card Generator</p>
   </div>
+  <button class="header-nav-btn" id="navDesignBtn">🎨 Design</button>
+  <button class="header-nav-btn" id="navSettingsBtn">⚙️ Settings</button>
   <div class="badge">GM TECH SOLUTIONS</div>
 </div>
 
+<!-- ══════════════════════════════════════════
+     DESIGN PAGE (MAIN)
+══════════════════════════════════════════ -->
+<div class="app-main-page" id="appMainPage">
 <div class="app-container">
   <div class="main-grid">
 
@@ -663,6 +799,130 @@
 
   </div><!-- /main-grid -->
 </div><!-- /app-container -->
+</div><!-- /app-main-page -->
+
+<!-- ══════════════════════════════════════════
+     SETTINGS PAGE
+══════════════════════════════════════════ -->
+<div class="settings-page" id="settingsPage">
+  <div class="app-container">
+    <div style="margin-bottom:20px;">
+      <h2 style="font-family:'Playfair Display',serif; color:var(--primary); font-size:1.4rem; margin-bottom:6px;">⚙️ Card Styling Settings</h2>
+      <p style="font-size:0.85rem; color:var(--text-muted);">Customize fonts, colors, and sizes. Changes apply to all card designs in real time.</p>
+    </div>
+
+    <div class="settings-grid">
+
+      <!-- FONT SETTINGS -->
+      <div class="settings-section">
+        <div class="settings-section-header">🔤 Typography</div>
+        <div class="settings-section-body">
+
+          <div class="settings-field">
+            <label>Font Family</label>
+            <select id="setFontFamily">
+              <option value="'DM Sans', sans-serif">DM Sans (Modern)</option>
+              <option value="'Playfair Display', serif">Playfair Display (Elegant)</option>
+              <option value="'Times New Roman', Georgia, serif">Times New Roman (Classic)</option>
+              <option value="'Roboto', sans-serif">Roboto (Clean)</option>
+              <option value="'Montserrat', sans-serif">Montserrat (Bold)</option>
+              <option value="'Oswald', sans-serif">Oswald (Condensed)</option>
+              <option value="Arial, Helvetica, sans-serif">Arial (System)</option>
+              <option value="Georgia, serif">Georgia (Serif)</option>
+            </select>
+            <div class="font-preview-box" id="fontPreviewBox">BISE SAHIWAL — Employee Card</div>
+          </div>
+
+          <div class="settings-field">
+            <label>Org Name Size <span class="range-val" id="valOrgSize">16px</span></label>
+            <input type="range" id="setOrgSize" min="10" max="28" value="16" step="1">
+          </div>
+
+          <div class="settings-field">
+            <label>Org Name Weight</label>
+            <select id="setOrgWeight">
+              <option value="600">Semibold (600)</option>
+              <option value="700">Bold (700)</option>
+              <option value="800" selected>Extra Bold (800)</option>
+              <option value="900">Black (900)</option>
+            </select>
+          </div>
+
+          <div class="settings-field">
+            <label>Employee Name Size <span class="range-val" id="valNameSize">13px</span></label>
+            <input type="range" id="setNameSize" min="9" max="20" value="13" step="1">
+          </div>
+
+          <div class="settings-field">
+            <label>Table / Body Font Size <span class="range-val" id="valBodySize">12px</span></label>
+            <input type="range" id="setBodySize" min="8" max="18" value="12" step="1">
+          </div>
+
+        </div>
+      </div>
+
+      <!-- COLOR SETTINGS -->
+      <div class="settings-section">
+        <div class="settings-section-header">🎨 Colors</div>
+        <div class="settings-section-body">
+
+          <div class="settings-field">
+            <label>Org Name / Title Color</label>
+            <div class="color-input-row">
+              <input type="color" id="setTitleColor" value="#ffffff">
+              <input type="text" id="setTitleColorHex" value="#ffffff">
+            </div>
+          </div>
+
+          <div class="settings-field">
+            <label>Header Background</label>
+            <div class="color-input-row">
+              <input type="color" id="setHeaderBg" value="#1a5c3e">
+              <input type="text" id="setHeaderBgHex" value="#1a5c3e">
+            </div>
+          </div>
+
+          <div class="settings-field">
+            <label>Accent / Gold Line</label>
+            <div class="color-input-row">
+              <input type="color" id="setAccentColor" value="#d4a72c">
+              <input type="text" id="setAccentColorHex" value="#d4a72c">
+            </div>
+          </div>
+
+          <div class="settings-field">
+            <label>Table Label Color</label>
+            <div class="color-input-row">
+              <input type="color" id="setLabelColor" value="#1a5c3e">
+              <input type="text" id="setLabelColorHex" value="#1a5c3e">
+            </div>
+          </div>
+
+          <div class="settings-field">
+            <label>Footer Background</label>
+            <div class="color-input-row">
+              <input type="color" id="setFooterBg" value="#1a5c3e">
+              <input type="text" id="setFooterBgHex" value="#1a5c3e">
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ACTIONS -->
+    <div class="settings-section" style="margin-top:24px;">
+      <div class="settings-section-body" style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+        <button class="btn-settings btn-settings-primary" id="applySettingsBtn">✅ Apply Settings</button>
+        <button class="btn-settings btn-settings-secondary" id="resetSettingsBtn">↺ Reset to Default</button>
+        <span style="font-size:0.78rem; color:var(--text-muted); margin-left:auto;">Changes are applied to the BISE Official design theme. Other themes keep their own style.</span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
 <!-- FOOTER -->
 <div class="app-footer">
   <div class="app-footer-inner">
@@ -689,6 +949,35 @@
   let globalDept = "Examination Wing";
   let globalFooter = "Govt. High School 175/9L, Chichawatni";
   let globalPhone = "+92 40 123 4567";
+
+  // ── Custom Styling State ──
+  const defaultStyle = {
+    fontFamily: "'DM Sans', sans-serif",
+    orgSize: 16,
+    orgWeight: "800",
+    nameSize: 13,
+    bodySize: 12,
+    titleColor: "#ffffff",
+    headerBg: "#1a5c3e",
+    accentColor: "#d4a72c",
+    labelColor: "#1a5c3e",
+    footerBg: "#1a5c3e"
+  };
+  let customStyle = { ...defaultStyle };
+
+  // ── Apply custom styles to a card wrapper ──
+  function applyCustomStyleToCard(el) {
+    if (!el) return;
+    el.style.setProperty('--card-font-family', customStyle.fontFamily);
+    el.style.setProperty('--card-title-size', customStyle.orgSize + 'px');
+    el.style.setProperty('--card-name-size', customStyle.nameSize + 'px');
+    el.style.setProperty('--card-font-size', customStyle.bodySize + 'px');
+    el.style.setProperty('--custom-title-color', customStyle.titleColor);
+    el.style.setProperty('--custom-header-bg', customStyle.headerBg);
+    el.style.setProperty('--custom-accent', customStyle.accentColor);
+    el.style.setProperty('--custom-label-color', customStyle.labelColor);
+    el.style.setProperty('--custom-footer-bg', customStyle.footerBg);
+  }
 
   // ── Read org fields ──
   function updateGlobals() {
@@ -880,6 +1169,10 @@
     const front = buildCardHTML("33345","GHULAM MUHAMMAD","SUPERINTENDENT (SST)",photoUrl,photoSig,sigHtml,"front","previewQRf",extra);
     const back  = buildCardHTML("33345","GHULAM MUHAMMAD","SUPERINTENDENT (SST)",photoUrl,photoSig,sigHtml,"back","previewQRb",extra);
     container.innerHTML = `<div class="card-pair pair-${currentDesign}"><div class="pair-label">Front</div>${front}</div><div class="card-pair pair-${currentDesign}"><div class="pair-label">Back</div>${back}</div>`;
+
+    // Apply custom style to preview cards
+    container.querySelectorAll('.id-card').forEach(el => applyCustomStyleToCard(el));
+
     spawnQR("previewQRb", `ID:33345 Name:GHULAM MUHAMMAD Org:${globalCompany} Inst:${globalFooter}`);
   }
 
@@ -925,15 +1218,12 @@
     output.appendChild(grid);
 
     let count = 0;
-    // Sequential rendering to ensure QR code renders perfectly for each container
     for (const emp of employees) {
       let imgUrl = "https://placehold.co/110x120/e8f0f8/1a3c5e?text=No+Photo";
       if (!bulk && singlePhotoData) imgUrl = singlePhotoData;
       else if (bulk && uploadedPhotosMap[emp.id.toLowerCase()]) imgUrl = uploadedPhotosMap[emp.id.toLowerCase()];
 
       const photoSig = (photoSigEnabled && hasSig) ? `<img class="photo-sig-stamp" src="${authoritySigUrl}">` : '';
-      
-      // Clean up the employee ID to use as a valid DOM element attribute selector safely
       const safeId = emp.id.replace(/\W/g,'');
       const qid = `qr_bulk_${safeId}_${count}`;
       const extra = { cnic: emp.cnic, boardId: emp.boardId, contact: emp.contact || "", doj: emp.doj || "", address: emp.address || "" };
@@ -946,10 +1236,11 @@
       pair.innerHTML = `<div class="pair-label" style="font-size:0.65rem;color:#888;">${esc(emp.name)} — ${esc(emp.id)}</div>${front}${back}`;
       grid.appendChild(pair);
 
-      // Instantly call standard wrapper with microtask to isolate dynamic rendering
+      // Apply custom styles
+      pair.querySelectorAll('.id-card').forEach(el => applyCustomStyleToCard(el));
+
       const textToScan = `ID:${emp.id} Name:${emp.name} Role:${emp.designation} Org:${globalCompany} Inst:${globalFooter}`;
       
-      // Avoid library concurrency overlap issues using immediate execution scope context
       ((targetId, content) => {
          const size = currentOrientation === 'landscape' ? 92 : 100;
          setTimeout(() => {
@@ -958,7 +1249,7 @@
               element.innerHTML = '';
               new QRCode(element, { text: content, width: size, height: size, correctLevel: QRCode.CorrectLevel.M });
            }
-         }, 200 + 150 * count); // Proper stagger so each QR has time to render
+         }, 200 + 150 * count);
       })(qid, textToScan);
 
       count++;
@@ -980,7 +1271,134 @@
     else { document.getElementById('btnBulk').classList.add('active'); document.getElementById('sectionBulk').classList.add('active'); }
   }
 
-  // ── Event Bindings ──
+  // ── Navigation between Design & Settings ──
+  function showMainPage() {
+    document.getElementById('appMainPage').classList.remove('hidden');
+    document.getElementById('settingsPage').classList.remove('active');
+    document.getElementById('navDesignBtn').classList.add('active');
+    document.getElementById('navSettingsBtn').classList.remove('active');
+  }
+  function showSettingsPage() {
+    document.getElementById('appMainPage').classList.add('hidden');
+    document.getElementById('settingsPage').classList.add('active');
+    document.getElementById('navDesignBtn').classList.remove('active');
+    document.getElementById('navSettingsBtn').classList.add('active');
+  }
+  document.getElementById('navDesignBtn').onclick = showMainPage;
+  document.getElementById('navSettingsBtn').onclick = showSettingsPage;
+
+  // ── Settings: live sync color hex ↔ picker ──
+  function bindColorPair(pickerId, hexId, styleKey) {
+    const picker = document.getElementById(pickerId);
+    const hex = document.getElementById(hexId);
+    picker.addEventListener('input', () => {
+      hex.value = picker.value;
+      customStyle[styleKey] = picker.value;
+    });
+    hex.addEventListener('input', () => {
+      if (/^#[0-9a-fA-F]{6}$/.test(hex.value)) {
+        picker.value = hex.value;
+        customStyle[styleKey] = hex.value;
+      }
+    });
+  }
+  bindColorPair('setTitleColor', 'setTitleColorHex', 'titleColor');
+  bindColorPair('setHeaderBg', 'setHeaderBgHex', 'headerBg');
+  bindColorPair('setAccentColor', 'setAccentColorHex', 'accentColor');
+  bindColorPair('setLabelColor', 'setLabelColorHex', 'labelColor');
+  bindColorPair('setFooterBg', 'setFooterBgHex', 'footerBg');
+
+  // ── Settings: font family preview ──
+  document.getElementById('setFontFamily').addEventListener('change', function() {
+    customStyle.fontFamily = this.value;
+    const preview = document.getElementById('fontPreviewBox');
+    preview.style.fontFamily = this.value;
+  });
+
+  // ── Settings: sliders ──
+  document.getElementById('setOrgSize').addEventListener('input', function() {
+    customStyle.orgSize = parseInt(this.value);
+    document.getElementById('valOrgSize').textContent = this.value + 'px';
+  });
+  document.getElementById('setNameSize').addEventListener('input', function() {
+    customStyle.nameSize = parseInt(this.value);
+    document.getElementById('valNameSize').textContent = this.value + 'px';
+  });
+  document.getElementById('setBodySize').addEventListener('input', function() {
+    customStyle.bodySize = parseInt(this.value);
+    document.getElementById('valBodySize').textContent = this.value + 'px';
+  });
+  document.getElementById('setOrgWeight').addEventListener('change', function() {
+    customStyle.orgWeight = this.value;
+  });
+
+  // ── Settings: apply ──
+  document.getElementById('applySettingsBtn').addEventListener('click', function() {
+    // Apply custom style to all existing cards (preview + generated)
+    document.querySelectorAll('.id-card').forEach(el => applyCustomStyleToCard(el));
+
+    // For BISE design, update header h2 and accent colors via inline style
+    document.querySelectorAll('.design-bise .id-card').forEach(card => {
+      const header = card.querySelector('.c-header');
+      if (header) header.style.background = customStyle.headerBg;
+      const h2 = card.querySelector('.c-header-text h2');
+      if (h2) {
+        h2.style.fontSize = customStyle.orgSize + 'px';
+        h2.style.fontWeight = customStyle.orgWeight;
+        h2.style.color = customStyle.titleColor;
+        h2.style.fontFamily = customStyle.fontFamily;
+      }
+      const labelCells = card.querySelectorAll('.c-table tr td:first-child');
+      labelCells.forEach(td => td.style.color = customStyle.labelColor);
+      const footer = card.querySelector('.c-footer');
+      if (footer) footer.style.background = customStyle.footerBg;
+      // Accent border on photo
+      const photo = card.querySelector('.c-photo');
+      if (photo) photo.style.borderColor = customStyle.accentColor;
+      // Card border
+      card.style.borderColor = customStyle.accentColor;
+    });
+
+    // Also update preview
+    renderPreviewCard();
+
+    // Show feedback
+    const btn = this;
+    const origText = btn.textContent;
+    btn.textContent = '✅ Applied!';
+    setTimeout(() => { btn.textContent = origText; }, 1500);
+  });
+
+  // ── Settings: reset ──
+  document.getElementById('resetSettingsBtn').addEventListener('click', function() {
+    customStyle = { ...defaultStyle };
+    // Update UI controls
+    document.getElementById('setFontFamily').value = defaultStyle.fontFamily;
+    document.getElementById('setOrgSize').value = defaultStyle.orgSize;
+    document.getElementById('valOrgSize').textContent = defaultStyle.orgSize + 'px';
+    document.getElementById('setOrgWeight').value = defaultStyle.orgWeight;
+    document.getElementById('setNameSize').value = defaultStyle.nameSize;
+    document.getElementById('valNameSize').textContent = defaultStyle.nameSize + 'px';
+    document.getElementById('setBodySize').value = defaultStyle.bodySize;
+    document.getElementById('valBodySize').textContent = defaultStyle.bodySize + 'px';
+    document.getElementById('setTitleColor').value = defaultStyle.titleColor;
+    document.getElementById('setTitleColorHex').value = defaultStyle.titleColor;
+    document.getElementById('setHeaderBg').value = defaultStyle.headerBg;
+    document.getElementById('setHeaderBgHex').value = defaultStyle.headerBg;
+    document.getElementById('setAccentColor').value = defaultStyle.accentColor;
+    document.getElementById('setAccentColorHex').value = defaultStyle.accentColor;
+    document.getElementById('setLabelColor').value = defaultStyle.labelColor;
+    document.getElementById('setLabelColorHex').value = defaultStyle.labelColor;
+    document.getElementById('setFooterBg').value = defaultStyle.footerBg;
+    document.getElementById('setFooterBgHex').value = defaultStyle.footerBg;
+    document.getElementById('fontPreviewBox').style.fontFamily = defaultStyle.fontFamily;
+
+    // Re-apply
+    document.querySelectorAll('.id-card').forEach(el => applyCustomStyleToCard(el));
+    renderPreviewCard();
+  });
+
+  // ── Event Bindings (Design page) ──
   document.getElementById('btnSingle').onclick = () => switchMode('single');
   document.getElementById('btnBulk').onclick   = () => switchMode('bulk');
   document.getElementById('generateBtn').onclick = generateAllCards;
@@ -1038,6 +1456,7 @@
 
   // ── Init ──
   updateGlobals();
+  showMainPage();
 </script>
 </body>
 </html>
