@@ -172,7 +172,7 @@
     /* ── DESIGN SELECTOR ── */
     .design-grid {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(3, 1fr);
       gap: 8px;
       margin-bottom: 14px;
     }
@@ -284,13 +284,11 @@
     /* Design-specific card-pair backgrounds */
     .pair-design-bise     { background: linear-gradient(135deg, #e6f2eb, #f5ead0) !important; border-color: #c9a840 !important; }
     .pair-design-glass    { background: linear-gradient(135deg, #d8e8f8, #e8f0fa) !important; border-color: #b0c8e0 !important; }
-    .pair-design-neon     { background: linear-gradient(135deg, #0a0e1a, #0d1428) !important; border-color: #00e5ff55 !important; }
-    .pair-design-neon .pair-label { color: #00e5ff99 !important; }
     .pair-design-minimal  { background: linear-gradient(135deg, #f4ede0, #fdf6ec) !important; border-color: #e07a2055 !important; }
     .pair-design-vintage  { background: linear-gradient(135deg, #f0ddb0, #faeac8) !important; border-color: #c8a870 !important; }
     .pair-design-corporate{ background: linear-gradient(135deg, #d4e4f0, #eaf2f8) !important; border-color: #1e406055 !important; }
-    .pair-design-darktech { background: linear-gradient(135deg, #101420, #181e2e) !important; border-color: #00b4d855 !important; }
-    .pair-design-darktech .pair-label { color: #6ac4e099 !important; }
+    .pair-design-elegant  { background: linear-gradient(135deg, #f4e8f0, #faeef8) !important; border-color: #8b4a8b55 !important; }
+    .pair-design-royal    { background: linear-gradient(135deg, #e8e4f0, #f0ecf8) !important; border-color: #4a3a8b55 !important; }
     .pair-label {
       width: 100%; text-align: center;
       font-size: 0.68rem; font-weight: 600;
@@ -337,9 +335,30 @@
       --card-name-size: 0.85rem;
       --card-title-size: 1rem;
       --card-font-family: 'DM Sans', sans-serif;
+      --dept-color: #b8e8c4;
+      --dept-size: 0.50rem;
+      --photo-size: 78px;
+      --photo-height: 90px;
+      --photo-position: flex-start;
     }
     .id-card.landscape { width: 330px; height: 210px; display: flex; flex-direction: column; }
     .id-card.portrait  { width: 265px; height: 415px; display: flex; flex-direction: column; }
+    /* ── BACKGROUND WATERMARK LOGOS ── */
+    .card-watermark {
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      display: flex; align-items: center; justify-content: center;
+      pointer-events: none; z-index: 0;
+      overflow: hidden;
+    }
+    .card-watermark img {
+      object-fit: contain;
+      position: absolute;
+    }
+    /* All card content must be above watermark */
+    .c-header, .c-body, .c-footer {
+      position: relative; z-index: 2;
+    }
     /* Card structure */
     .c-header {
       display: flex; align-items: center; gap: 9px;
@@ -357,16 +376,42 @@
       line-height: 1.2; 
       font-family: var(--card-font-family);
     }
-    .c-header-text p  { font-size: 0.50rem; opacity: 0.85; margin-top: 1px; font-family: var(--card-font-family); }
+    .c-header-text p  { 
+      font-size: var(--dept-size); 
+      color: var(--dept-color);
+      opacity: 0.95; 
+      margin-top: 1px; 
+      font-family: var(--card-font-family);
+      font-weight: 600;
+    }
     .c-body { flex: 1; display: flex; padding: 9px 10px; gap: 10px; overflow: hidden; min-height: 0; }
     .portrait .c-body { flex-direction: column; align-items: center; }
+    /* ── OPTIMIZED PHOTO BOX ── */
     .c-photo {
-      width: 78px; height: 90px; flex-shrink: 0;
-      border-radius: 9px; overflow: hidden;
+      width: var(--photo-size); 
+      height: var(--photo-height); 
+      flex-shrink: 0;
+      border-radius: 9px; 
+      overflow: hidden;
       position: relative;
+      align-self: var(--photo-position);
+      background: #f0f0f0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
-    .portrait .c-photo { width: 100px; height: 112px; flex-shrink: 0; }
-    .c-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .portrait .c-photo { 
+      width: calc(var(--photo-size) * 1.28); 
+      height: calc(var(--photo-height) * 1.24); 
+      flex-shrink: 0; 
+    }
+    .c-photo img { 
+      width: 100%; 
+      height: 100%; 
+      object-fit: cover; 
+      object-position: center top;
+      display: block; 
+    }
     .photo-sig-stamp {
       position: absolute; bottom: 1px; right: 0;
       max-height: 36px; max-width: 66px;
@@ -417,7 +462,7 @@
       border-bottom: 2.5px solid var(--bise-gold);
     }
     .design-bise .c-header-text h2 { color: #ffffff; font-family: 'Playfair Display', serif; font-size: var(--card-title-size); font-weight: 900; letter-spacing: 0.5px; text-transform: uppercase; }
-    .design-bise .c-header-text p  { color: #b8e8c4; }
+    .design-bise .c-header-text p  { color: var(--dept-color); }
     .design-bise .c-logo { background: rgba(255,255,255,0.12); border: 1.5px solid var(--bise-gold); }
     .design-bise .c-card-title { color: var(--bise-gold); }
     .design-bise .c-table tr td { border-bottom: 1px dotted #d4b060; color: #2a1a00; }
@@ -429,25 +474,15 @@
     .design-glass .id-card { background: linear-gradient(145deg, #f4f8ff, #e8f0f8); border: 1px solid rgba(150,180,220,0.4); }
     .design-glass .c-header { background: linear-gradient(135deg, #1e2e42, #2c4a6e); }
     .design-glass .c-header-text h2 { color: #fff; }
-    .design-glass .c-header-text p  { color: #a8c5e8; }
+    .design-glass .c-header-text p  { color: var(--dept-color); }
     .design-glass .c-card-title { color: #1e4060; }
     .design-glass .c-footer { background: #1e2e42; color: #c8ddf0; }
     .design-glass .c-qr { background: white; border: 1px solid #c0d0e0; }
-    /* ════ DESIGN: NEON ════ */
-    .design-neon .id-card { background: #0d111c; border: 2px solid #00e5ff; box-shadow: 0 0 16px rgba(0,229,255,0.3); color: #00e5ff; }
-    .design-neon .c-header { background: #07090f; border-bottom: 2px solid #00e5ff; }
-    .design-neon .c-header-text h2 { color: #00e5ff; }
-    .design-neon .c-header-text p  { color: #0088aa; }
-    .design-neon .c-card-title { color: #00ffaa; }
-    .design-neon .c-table tr td { color: #b0f0ff; border-bottom: 1px solid #003344; }
-    .design-neon .c-table tr td:first-child { color: #00e5ff; }
-    .design-neon .c-footer { background: #07090f; color: #00e5ff; border-top: 1px solid #00e5ff; }
-    .design-neon .c-qr { background: #0f1628; border: 1px solid #00e5ff; }
     /* ════ DESIGN: MINIMAL ════ */
     .design-minimal .id-card { background: #fffcf8; border-left: 7px solid #e07a20; border-radius: 8px; }
     .design-minimal .c-header { background: #2c3e2f; }
     .design-minimal .c-header-text h2 { color: #f4d030; }
-    .design-minimal .c-header-text p  { color: #8aaa8e; }
+    .design-minimal .c-header-text p  { color: var(--dept-color); }
     .design-minimal .c-card-title { color: #e07a20; }
     .design-minimal .c-footer { background: #2c3e2f; color: #e8e0c8; }
     .design-minimal .c-qr { background: white; border: 1px solid #ddd; }
@@ -455,7 +490,7 @@
     .design-vintage .id-card { background: #fdf3d5; border: 1px solid #c8a870; box-shadow: 5px 5px 0 #c8a870; border-radius: 10px; }
     .design-vintage .c-header { background: #b87b3a; }
     .design-vintage .c-header-text h2 { color: #fff0c8; font-family: 'Playfair Display', serif; }
-    .design-vintage .c-header-text p  { color: #f0c880; }
+    .design-vintage .c-header-text p  { color: var(--dept-color); }
     .design-vintage .c-card-title { color: #7a4a10; }
     .design-vintage .c-table tr td { border-bottom: 1px dotted #b88a40; color: #3a2200; }
     .design-vintage .c-footer { background: #b87b3a; color: #fff0c8; }
@@ -464,24 +499,45 @@
     .design-corporate .id-card { background: #fafcff; border: 1px solid #1e4060; }
     .design-corporate .c-header { background: #1e4060; clip-path: polygon(0 0, 100% 0, 96% 100%, 0% 100%); padding-right: 22px; }
     .design-corporate .c-header-text h2 { color: white; }
-    .design-corporate .c-header-text p  { color: #90b8d4; }
+    .design-corporate .c-header-text p  { color: var(--dept-color); }
     .design-corporate .c-card-title { color: #1e4060; }
     .design-corporate .c-footer { background: #1e4060; color: #cce0f0; }
     .design-corporate .c-qr { background: white; border: 1px solid #c0d0e0; }
-    /* ════ DESIGN: DARK TECH ════ */
-    .design-darktech .id-card { background: #181c2c; color: #c4f1ff; border-bottom: 3px solid #00b4d8; }
-    .design-darktech .c-header { background: #0b111f; border-bottom: 1px solid #00b4d8; }
-    .design-darktech .c-header-text h2 { color: #c4f1ff; }
-    .design-darktech .c-header-text p  { color: #4a90c0; }
-    .design-darktech .c-card-title { color: #00d4ff; }
-    .design-darktech .c-table tr td { color: #98d4f0; border-bottom: 1px solid #1e2c3e; }
-    .design-darktech .c-table tr td:first-child { color: #00c4e8; }
-    .design-darktech .c-footer { background: #0b111f; color: #6ac4e0; border-top: 1px solid #00b4d8; }
-    .design-darktech .c-qr { background: #0b111f; border: 1px solid #00b4d8; }
+    /* ════ DESIGN: ELEGANT ════ */
+    .design-elegant .id-card { background: linear-gradient(160deg, #fdf8fc, #f8f0f8); border: 2px solid #8b4a8b; border-radius: 12px; }
+    .design-elegant .c-header { background: linear-gradient(120deg, #5a2a5a, #8b4a8b); border-bottom: 2px solid #d4a72c; }
+    .design-elegant .c-header-text h2 { color: #fff5f9; font-family: 'Playfair Display', serif; font-weight: 800; letter-spacing: 0.3px; }
+    .design-elegant .c-header-text p  { color: var(--dept-color); }
+    .design-elegant .c-logo { background: rgba(255,255,255,0.15); border: 1.5px solid #d4a72c; }
+    .design-elegant .c-card-title { color: #8b4a8b; }
+    .design-elegant .c-table tr td { border-bottom: 1px dotted #d4a0d4; color: #3a1a3a; }
+    .design-elegant .c-table tr td:first-child { color: #5a2a5a; }
+    .design-elegant .c-photo { border: 2.5px solid #8b4a8b; }
+    .design-elegant .c-footer { background: linear-gradient(120deg, #5a2a5a, #8b4a8b); color: #fff5f9; }
+    .design-elegant .c-qr { background: #fdf8fc; border: 1.5px solid #8b4a8b; }
+    /* ════ DESIGN: ROYAL ════ */
+    .design-royal .id-card { background: linear-gradient(160deg, #f4f2fa, #ece8f8); border: 2px solid #4a3a8b; border-radius: 12px; }
+    .design-royal .c-header { background: linear-gradient(120deg, #2a1a5a, #4a3a8b); border-bottom: 2px solid #d4a72c; }
+    .design-royal .c-header-text h2 { color: #f0ecff; font-family: 'Playfair Display', serif; font-weight: 900; letter-spacing: 0.5px; }
+    .design-royal .c-header-text p  { color: var(--dept-color); }
+    .design-royal .c-logo { background: rgba(255,255,255,0.15); border: 1.5px solid #d4a72c; }
+    .design-royal .c-card-title { color: #4a3a8b; }
+    .design-royal .c-table tr td { border-bottom: 1px dotted #b0a0d4; color: #1a1a3a; }
+    .design-royal .c-table tr td:first-child { color: #2a1a5a; }
+    .design-royal .c-photo { border: 2.5px solid #4a3a8b; }
+    .design-royal .c-footer { background: linear-gradient(120deg, #2a1a5a, #4a3a8b); color: #f0ecff; }
+    .design-royal .c-qr { background: #f4f2fa; border: 1.5px solid #4a3a8b; }
     /* ════ SETTINGS PAGE ════ */
     .settings-page { display: none; }
     .settings-page.active { display: block; }
     .app-main-page.hidden { display: none; }
+    .settings-layout {
+      display: grid;
+      grid-template-columns: 1fr 420px;
+      gap: 24px;
+      align-items: start;
+    }
+    @media (max-width: 1100px) { .settings-layout { grid-template-columns: 1fr; } }
     .settings-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -580,10 +636,70 @@
       border: 1px solid var(--border);
     }
     .btn-settings-secondary:hover { background: var(--border); }
+    /* ── SETTINGS LIVE PREVIEW STICKY ── */
+    .settings-live-preview {
+      position: sticky;
+      top: 20px;
+      background: var(--surface);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    .settings-live-preview .panel-header {
+      background: var(--primary);
+      color: #fff;
+    }
+    .settings-live-preview .panel-header::before {
+      content: '● LIVE';
+      color: #4ade80;
+      font-size: 0.65rem;
+      margin-right: 8px;
+      font-weight: 800;
+    }
+    .settings-live-body {
+      padding: 20px;
+      background: var(--surface2);
+      display: flex;
+      justify-content: center;
+    }
+    .settings-live-body .card-pair {
+      background: transparent !important;
+      border: none !important;
+      box-shadow: none !important;
+      padding: 0 !important;
+    }
+    /* ── LOGO VISIBILITY TOGGLES ── */
+    .logo-toggle-row {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+    .logo-toggle-btn {
+      flex: 1;
+      min-width: 100px;
+      padding: 8px 10px;
+      border: 2px solid var(--border);
+      background: var(--surface2);
+      border-radius: 9px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.18s;
+      font-family: 'DM Sans', sans-serif;
+      color: var(--text-muted);
+      text-align: center;
+    }
+    .logo-toggle-btn:hover { border-color: var(--primary-light); }
+    .logo-toggle-btn.active {
+      border-color: var(--primary);
+      background: #e8f0f8;
+      color: var(--primary);
+    }
     /* ════ PRINT ════ */
     @media print {
       body { background: white; }
-      .app-header, .left-panel, .preview-section, .print-bar, .panel-header, .app-footer, .header-nav-btn { display: none !important; }
+      .app-header, .left-panel, .preview-section, .print-bar, .panel-header, .app-footer, .header-nav-btn, .settings-page { display: none !important; }
       .main-grid { display: block; }
       .right-panel-inner { padding: 0; }
       .cards-grid { display: block; }
@@ -689,11 +805,11 @@
           <div class="design-grid" id="designSelector">
             <div class="design-chip active" data-design="design-bise"><span>🎓</span>BISE Official</div>
             <div class="design-chip" data-design="design-glass"><span>✨</span>Glass</div>
-            <div class="design-chip" data-design="design-neon"><span>⚡</span>Neon Edge</div>
             <div class="design-chip" data-design="design-minimal"><span>🎨</span>Minimal</div>
             <div class="design-chip" data-design="design-vintage"><span>📜</span>Vintage</div>
             <div class="design-chip" data-design="design-corporate"><span>🏢</span>Corporate</div>
-            <div class="design-chip" data-design="design-darktech"><span>🌙</span>Dark Tech</div>
+            <div class="design-chip" data-design="design-elegant"><span>💜</span>Elegant</div>
+            <div class="design-chip" data-design="design-royal"><span>👑</span>Royal</div>
           </div>
 
           <!-- Orientation -->
@@ -714,12 +830,16 @@
             <div class="form-group"><label>📞 Contact</label><input type="text" id="companyPhone" value="+92 40 123 4567"></div>
           </div>
           <div class="row-2">
-            <div class="form-group"><label>🖼️ Logo</label><input type="file" id="logoFile" accept="image/*"></div>
+            <div class="form-group"><label>🖼️ Org Logo</label><input type="file" id="logoFile" accept="image/*"></div>
+            <div class="form-group"><label>🏫 School Logo</label><input type="file" id="schoolLogoFile" accept="image/*"></div>
+          </div>
+          <div class="row-2">
             <div class="form-group">
               <label>✍️ Authority Signature</label>
               <input type="file" id="sigFile" accept="image/*">
               <label class="check-row"><input type="checkbox" id="enablePhotoSig"> Overlay sig on photo</label>
             </div>
+            <div></div>
           </div>
 
           <!-- Mode Tabs -->
@@ -802,124 +922,258 @@
 </div><!-- /app-main-page -->
 
 <!-- ══════════════════════════════════════════
-     SETTINGS PAGE
+     SETTINGS PAGE (WITH LIVE PREVIEW)
 ══════════════════════════════════════════ -->
 <div class="settings-page" id="settingsPage">
   <div class="app-container">
     <div style="margin-bottom:20px;">
       <h2 style="font-family:'Playfair Display',serif; color:var(--primary); font-size:1.4rem; margin-bottom:6px;">⚙️ Card Styling Settings</h2>
-      <p style="font-size:0.85rem; color:var(--text-muted);">Customize fonts, colors, and sizes. Changes apply to all card designs in real time.</p>
+      <p style="font-size:0.85rem; color:var(--text-muted);">Customize fonts, colors, sizes, and watermark layouts. Changes update the live preview instantly.</p>
     </div>
 
-    <div class="settings-grid">
+    <div class="settings-layout">
+      <!-- LEFT: Settings Controls -->
+      <div>
+        <div class="settings-grid">
 
-      <!-- FONT SETTINGS -->
-      <div class="settings-section">
-        <div class="settings-section-header">🔤 Typography</div>
-        <div class="settings-section-body">
+          <!-- FONT SETTINGS -->
+          <div class="settings-section">
+            <div class="settings-section-header">🔤 Typography</div>
+            <div class="settings-section-body">
 
-          <div class="settings-field">
-            <label>Font Family</label>
-            <select id="setFontFamily">
-              <option value="'DM Sans', sans-serif">DM Sans (Modern)</option>
-              <option value="'Playfair Display', serif">Playfair Display (Elegant)</option>
-              <option value="'Times New Roman', Georgia, serif">Times New Roman (Classic)</option>
-              <option value="'Roboto', sans-serif">Roboto (Clean)</option>
-              <option value="'Montserrat', sans-serif">Montserrat (Bold)</option>
-              <option value="'Oswald', sans-serif">Oswald (Condensed)</option>
-              <option value="Arial, Helvetica, sans-serif">Arial (System)</option>
-              <option value="Georgia, serif">Georgia (Serif)</option>
-            </select>
-            <div class="font-preview-box" id="fontPreviewBox">BISE SAHIWAL — Employee Card</div>
+              <div class="settings-field">
+                <label>Font Family</label>
+                <select id="setFontFamily">
+                  <option value="'DM Sans', sans-serif">DM Sans (Modern)</option>
+                  <option value="'Playfair Display', serif">Playfair Display (Elegant)</option>
+                  <option value="'Times New Roman', Georgia, serif">Times New Roman (Classic)</option>
+                  <option value="'Roboto', sans-serif">Roboto (Clean)</option>
+                  <option value="'Montserrat', sans-serif">Montserrat (Bold)</option>
+                  <option value="'Oswald', sans-serif">Oswald (Condensed)</option>
+                  <option value="Arial, Helvetica, sans-serif">Arial (System)</option>
+                  <option value="Georgia, serif">Georgia (Serif)</option>
+                </select>
+                <div class="font-preview-box" id="fontPreviewBox">BISE SAHIWAL — Employee Card</div>
+              </div>
+
+              <div class="settings-field">
+                <label>Org Name Size <span class="range-val" id="valOrgSize">16px</span></label>
+                <input type="range" id="setOrgSize" min="10" max="28" value="16" step="1">
+              </div>
+
+              <div class="settings-field">
+                <label>Org Name Weight</label>
+                <select id="setOrgWeight">
+                  <option value="600">Semibold (600)</option>
+                  <option value="700">Bold (700)</option>
+                  <option value="800" selected>Extra Bold (800)</option>
+                  <option value="900">Black (900)</option>
+                </select>
+              </div>
+
+              <div class="settings-field">
+                <label>Employee Name Size <span class="range-val" id="valNameSize">13px</span></label>
+                <input type="range" id="setNameSize" min="9" max="20" value="13" step="1">
+              </div>
+
+              <div class="settings-field">
+                <label>Table / Body Font Size <span class="range-val" id="valBodySize">12px</span></label>
+                <input type="range" id="setBodySize" min="8" max="18" value="12" step="1">
+              </div>
+
+            </div>
           </div>
 
-          <div class="settings-field">
-            <label>Org Name Size <span class="range-val" id="valOrgSize">16px</span></label>
-            <input type="range" id="setOrgSize" min="10" max="28" value="16" step="1">
+          <!-- COLOR SETTINGS -->
+          <div class="settings-section">
+            <div class="settings-section-header">🎨 Colors</div>
+            <div class="settings-section-body">
+
+              <div class="settings-field">
+                <label>Org Name / Title Color</label>
+                <div class="color-input-row">
+                  <input type="color" id="setTitleColor" value="#ffffff">
+                  <input type="text" id="setTitleColorHex" value="#ffffff">
+                </div>
+              </div>
+
+              <div class="settings-field">
+                <label>Header Background</label>
+                <div class="color-input-row">
+                  <input type="color" id="setHeaderBg" value="#1a5c3e">
+                  <input type="text" id="setHeaderBgHex" value="#1a5c3e">
+                </div>
+              </div>
+
+              <div class="settings-field">
+                <label>Department Text Color</label>
+                <div class="color-input-row">
+                  <input type="color" id="setDeptColor" value="#b8e8c4">
+                  <input type="text" id="setDeptColorHex" value="#b8e8c4">
+                </div>
+              </div>
+
+              <div class="settings-field">
+                <label>Accent / Gold Line</label>
+                <div class="color-input-row">
+                  <input type="color" id="setAccentColor" value="#d4a72c">
+                  <input type="text" id="setAccentColorHex" value="#d4a72c">
+                </div>
+              </div>
+
+              <div class="settings-field">
+                <label>Table Label Color</label>
+                <div class="color-input-row">
+                  <input type="color" id="setLabelColor" value="#1a5c3e">
+                  <input type="text" id="setLabelColorHex" value="#1a5c3e">
+                </div>
+              </div>
+
+              <div class="settings-field">
+                <label>Footer Background</label>
+                <div class="color-input-row">
+                  <input type="color" id="setFooterBg" value="#1a5c3e">
+                  <input type="text" id="setFooterBgHex" value="#1a5c3e">
+                </div>
+              </div>
+
+            </div>
           </div>
 
-          <div class="settings-field">
-            <label>Org Name Weight</label>
-            <select id="setOrgWeight">
-              <option value="600">Semibold (600)</option>
-              <option value="700">Bold (700)</option>
-              <option value="800" selected>Extra Bold (800)</option>
-              <option value="900">Black (900)</option>
-            </select>
+          <!-- DEPARTMENT TEXT SETTINGS -->
+          <div class="settings-section">
+            <div class="settings-section-header">🏛️ Department Text</div>
+            <div class="settings-section-body">
+              <div class="settings-field">
+                <label>Department Text Size <span class="range-val" id="valDeptSize">8px</span></label>
+                <input type="range" id="setDeptSize" min="6" max="16" value="8" step="1">
+              </div>
+              <p style="font-size:0.75rem; color:var(--text-muted); margin-top:4px;">
+                💡 This controls the small department text below the organization name in the card header.
+              </p>
+            </div>
           </div>
 
-          <div class="settings-field">
-            <label>Employee Name Size <span class="range-val" id="valNameSize">13px</span></label>
-            <input type="range" id="setNameSize" min="9" max="20" value="13" step="1">
+          <!-- PHOTO SETTINGS -->
+          <div class="settings-section">
+            <div class="settings-section-header">📸 Photo Settings</div>
+            <div class="settings-section-body">
+              <div class="settings-field">
+                <label>Photo Width <span class="range-val" id="valPhotoSize">78px</span></label>
+                <input type="range" id="setPhotoSize" min="50" max="120" value="78" step="1">
+              </div>
+              <div class="settings-field">
+                <label>Photo Height <span class="range-val" id="valPhotoHeight">90px</span></label>
+                <input type="range" id="setPhotoHeight" min="60" max="140" value="90" step="1">
+              </div>
+              <div class="settings-field">
+                <label>Photo Horizontal Position (Landscape)</label>
+                <select id="setPhotoPosition">
+                  <option value="flex-start" selected>Left</option>
+                  <option value="center">Center</option>
+                  <option value="flex-end">Right</option>
+                </select>
+              </div>
+              <p style="font-size:0.75rem; color:var(--text-muted); margin-top:4px;">
+                💡 Photos use `object-fit: cover` to fill the box without distortion. Position only affects landscape layout.
+              </p>
+            </div>
           </div>
 
-          <div class="settings-field">
-            <label>Table / Body Font Size <span class="range-val" id="valBodySize">12px</span></label>
-            <input type="range" id="setBodySize" min="8" max="18" value="12" step="1">
+          <!-- WATERMARK SETTINGS -->
+          <div class="settings-section" style="grid-column: 1 / -1;">
+            <div class="settings-section-header">🖼️ Watermark / Background Logos</div>
+            <div class="settings-section-body">
+
+              <!-- Which logos to show -->
+              <div class="settings-field">
+                <label>Background Logo Visibility</label>
+                <div class="logo-toggle-row" id="logoVisibilityRow">
+                  <button class="logo-toggle-btn active" data-vis="both">🎓 + 🏫 Both</button>
+                  <button class="logo-toggle-btn" data-vis="org">🎓 Org Only</button>
+                  <button class="logo-toggle-btn" data-vis="school">🏫 School Only</button>
+                  <button class="logo-toggle-btn" data-vis="none">🚫 None</button>
+                </div>
+                <p style="font-size:0.72rem; color:var(--text-muted); margin-top:2px;">
+                  Choose which logo(s) appear as faint background watermarks on the card.
+                </p>
+              </div>
+
+              <div class="settings-grid" style="grid-template-columns:1fr 1fr; margin:0; gap:16px;">
+                <!-- ORG LOGO CONTROLS -->
+                <div style="background:var(--surface2); border:1px solid var(--border); border-radius:12px; padding:14px;">
+                  <div style="font-size:0.75rem; font-weight:700; color:var(--primary); margin-bottom:10px; text-transform:uppercase; letter-spacing:0.5px;">🎓 Org Logo Watermark</div>
+                  <div class="settings-field">
+                    <label>Opacity <span class="range-val" id="valOrgWmOpacity">8%</span></label>
+                    <input type="range" id="setOrgWmOpacity" min="0" max="40" value="8" step="1">
+                  </div>
+                  <div class="settings-field">
+                    <label>Size <span class="range-val" id="valOrgWmSize">70%</span></label>
+                    <input type="range" id="setOrgWmSize" min="20" max="100" value="70" step="1">
+                  </div>
+                  <div class="settings-field" style="margin-bottom:0;">
+                    <label>Position</label>
+                    <select id="setOrgWmPosition">
+                      <option value="top-left" selected>Top Left</option>
+                      <option value="top-right">Top Right</option>
+                      <option value="bottom-left">Bottom Left</option>
+                      <option value="bottom-right">Bottom Right</option>
+                      <option value="center">Center</option>
+                    </select>
+                  </div>
+                </div>
+
+                <!-- SCHOOL LOGO CONTROLS -->
+                <div style="background:var(--surface2); border:1px solid var(--border); border-radius:12px; padding:14px;">
+                  <div style="font-size:0.75rem; font-weight:700; color:var(--primary); margin-bottom:10px; text-transform:uppercase; letter-spacing:0.5px;">🏫 School Logo Watermark</div>
+                  <div class="settings-field">
+                    <label>Opacity <span class="range-val" id="valSchoolWmOpacity">8%</span></label>
+                    <input type="range" id="setSchoolWmOpacity" min="0" max="40" value="8" step="1">
+                  </div>
+                  <div class="settings-field">
+                    <label>Size <span class="range-val" id="valSchoolWmSize">55%</span></label>
+                    <input type="range" id="setSchoolWmSize" min="20" max="100" value="55" step="1">
+                  </div>
+                  <div class="settings-field" style="margin-bottom:0;">
+                    <label>Position</label>
+                    <select id="setSchoolWmPosition">
+                      <option value="top-left">Top Left</option>
+                      <option value="top-right">Top Right</option>
+                      <option value="bottom-left">Bottom Left</option>
+                      <option value="bottom-right" selected>Bottom Right</option>
+                      <option value="center">Center</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <p style="font-size:0.72rem; color:var(--text-muted); margin-top:10px;">
+                💡 Set opacity to 0% to hide a watermark. Size adjusts the logo's width (as a percentage of the card).
+              </p>
+            </div>
           </div>
 
         </div>
+
+        <!-- ACTIONS -->
+        <div class="settings-section" style="margin-top:0;">
+          <div class="settings-section-body" style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+            <button class="btn-settings btn-settings-primary" id="applySettingsBtn">✅ Apply Settings</button>
+            <button class="btn-settings btn-settings-secondary" id="resetSettingsBtn">↺ Reset to Default</button>
+            <span style="font-size:0.78rem; color:var(--text-muted); margin-left:auto;">Changes preview live as you adjust.</span>
+          </div>
+        </div>
       </div>
 
-      <!-- COLOR SETTINGS -->
-      <div class="settings-section">
-        <div class="settings-section-header">🎨 Colors</div>
-        <div class="settings-section-body">
-
-          <div class="settings-field">
-            <label>Org Name / Title Color</label>
-            <div class="color-input-row">
-              <input type="color" id="setTitleColor" value="#ffffff">
-              <input type="text" id="setTitleColorHex" value="#ffffff">
-            </div>
-          </div>
-
-          <div class="settings-field">
-            <label>Header Background</label>
-            <div class="color-input-row">
-              <input type="color" id="setHeaderBg" value="#1a5c3e">
-              <input type="text" id="setHeaderBgHex" value="#1a5c3e">
-            </div>
-          </div>
-
-          <div class="settings-field">
-            <label>Accent / Gold Line</label>
-            <div class="color-input-row">
-              <input type="color" id="setAccentColor" value="#d4a72c">
-              <input type="text" id="setAccentColorHex" value="#d4a72c">
-            </div>
-          </div>
-
-          <div class="settings-field">
-            <label>Table Label Color</label>
-            <div class="color-input-row">
-              <input type="color" id="setLabelColor" value="#1a5c3e">
-              <input type="text" id="setLabelColorHex" value="#1a5c3e">
-            </div>
-          </div>
-
-          <div class="settings-field">
-            <label>Footer Background</label>
-            <div class="color-input-row">
-              <input type="color" id="setFooterBg" value="#1a5c3e">
-              <input type="text" id="setFooterBgHex" value="#1a5c3e">
-            </div>
-          </div>
-
+      <!-- RIGHT: Sticky Live Preview -->
+      <div class="settings-live-preview">
+        <div class="panel-header">Live Preview</div>
+        <div class="settings-live-body">
+          <div id="settingsPreviewContainer" class="preview-cards-row"></div>
         </div>
       </div>
 
     </div>
-
-    <!-- ACTIONS -->
-    <div class="settings-section" style="margin-top:24px;">
-      <div class="settings-section-body" style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
-        <button class="btn-settings btn-settings-primary" id="applySettingsBtn">✅ Apply Settings</button>
-        <button class="btn-settings btn-settings-secondary" id="resetSettingsBtn">↺ Reset to Default</button>
-        <span style="font-size:0.78rem; color:var(--text-muted); margin-left:auto;">Changes are applied to the BISE Official design theme. Other themes keep their own style.</span>
-      </div>
-    </div>
-
   </div>
 </div>
 
@@ -941,6 +1195,7 @@
   let currentDesign = "design-bise";
   let currentOrientation = "landscape";
   let companyLogoUrl = "";
+  let schoolLogoUrl = "";
   let authoritySigUrl = "";
   let uploadedPhotosMap = {};
   let singlePhotoData = "";
@@ -957,13 +1212,45 @@
     orgWeight: "800",
     nameSize: 13,
     bodySize: 12,
+    deptSize: 8,
+    deptColor: "#b8e8c4",
     titleColor: "#ffffff",
     headerBg: "#1a5c3e",
     accentColor: "#d4a72c",
     labelColor: "#1a5c3e",
-    footerBg: "#1a5c3e"
+    footerBg: "#1a5c3e",
+    orgWmOpacity: 8,
+    schoolWmOpacity: 8,
+    orgWmSize: 70,
+    schoolWmSize: 55,
+    orgWmPosition: "top-left",
+    schoolWmPosition: "bottom-right",
+    logoVisibility: "both",
+    photoSize: 78,
+    photoHeight: 90,
+    photoPosition: "flex-start"
   };
   let customStyle = { ...defaultStyle };
+
+  // ── Watermark position → CSS mapping ──
+  function getWmPositionCSS(pos) {
+    switch(pos) {
+      case 'top-left':    return 'top: 4%; left: 4%;';
+      case 'top-right':   return 'top: 4%; right: 4%;';
+      case 'bottom-left': return 'bottom: 4%; left: 4%;';
+      case 'bottom-right':return 'bottom: 4%; right: 4%;';
+      case 'center':      return 'top: 50%; left: 50%; transform: translate(-50%, -50%);';
+      default:            return 'top: 4%; left: 4%;';
+    }
+  }
+
+  // ── Check if a logo should be shown ──
+  function shouldShowOrgLogo() {
+    return customStyle.logoVisibility === 'both' || customStyle.logoVisibility === 'org';
+  }
+  function shouldShowSchoolLogo() {
+    return customStyle.logoVisibility === 'both' || customStyle.logoVisibility === 'school';
+  }
 
   // ── Apply custom styles to a card wrapper ──
   function applyCustomStyleToCard(el) {
@@ -972,11 +1259,47 @@
     el.style.setProperty('--card-title-size', customStyle.orgSize + 'px');
     el.style.setProperty('--card-name-size', customStyle.nameSize + 'px');
     el.style.setProperty('--card-font-size', customStyle.bodySize + 'px');
+    el.style.setProperty('--dept-color', customStyle.deptColor);
+    el.style.setProperty('--dept-size', customStyle.deptSize + 'px');
+    el.style.setProperty('--photo-size', customStyle.photoSize + 'px');
+    el.style.setProperty('--photo-height', customStyle.photoHeight + 'px');
+    el.style.setProperty('--photo-position', customStyle.photoPosition);
     el.style.setProperty('--custom-title-color', customStyle.titleColor);
     el.style.setProperty('--custom-header-bg', customStyle.headerBg);
     el.style.setProperty('--custom-accent', customStyle.accentColor);
     el.style.setProperty('--custom-label-color', customStyle.labelColor);
     el.style.setProperty('--custom-footer-bg', customStyle.footerBg);
+
+    // Apply watermark opacities, sizes, positions, and visibility
+    const orgWm = el.querySelector('.wm-org');
+    if (orgWm) {
+      if (shouldShowOrgLogo()) {
+        orgWm.style.display = 'block';
+        orgWm.style.opacity = (customStyle.orgWmOpacity / 100).toString();
+        orgWm.style.width = customStyle.orgWmSize + '%';
+        orgWm.style.height = 'auto';
+        // Reset all positioning then apply new
+        orgWm.style.top = ''; orgWm.style.left = ''; orgWm.style.right = ''; orgWm.style.bottom = ''; orgWm.style.transform = '';
+        const css = getWmPositionCSS(customStyle.orgWmPosition);
+        orgWm.setAttribute('style', orgWm.getAttribute('style') + ';' + css);
+      } else {
+        orgWm.style.display = 'none';
+      }
+    }
+    const schoolWm = el.querySelector('.wm-school');
+    if (schoolWm) {
+      if (shouldShowSchoolLogo()) {
+        schoolWm.style.display = 'block';
+        schoolWm.style.opacity = (customStyle.schoolWmOpacity / 100).toString();
+        schoolWm.style.width = customStyle.schoolWmSize + '%';
+        schoolWm.style.height = 'auto';
+        schoolWm.style.top = ''; schoolWm.style.left = ''; schoolWm.style.right = ''; schoolWm.style.bottom = ''; schoolWm.style.transform = '';
+        const css = getWmPositionCSS(customStyle.schoolWmPosition);
+        schoolWm.setAttribute('style', schoolWm.getAttribute('style') + ';' + css);
+      } else {
+        schoolWm.style.display = 'none';
+      }
+    }
   }
 
   // ── Read org fields ──
@@ -986,11 +1309,31 @@
     globalFooter  = document.getElementById('issueDate').value.trim() || "";
     globalPhone   = document.getElementById('companyPhone').value.trim() || "";
     renderPreviewCard();
+    renderSettingsPreview();
   }
 
   // ── Logo placeholder ──
   function logoSrc() {
     return companyLogoUrl || "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60' viewBox='0 0 60 60'%3E%3Crect width='60' height='60' rx='8' fill='%23c9952e'/%3E%3Ctext x='50%25' y='54%25' font-size='22' font-family='serif' fill='white' text-anchor='middle' dominant-baseline='middle'%3E🎓%3C/text%3E%3C/svg%3E";
+  }
+
+  // ── School logo placeholder ──
+  function schoolLogoSrc() {
+    return schoolLogoUrl || "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Crect width='80' height='80' rx='12' fill='%231a5c3e'/%3E%3Ctext x='50%25' y='54%25' font-size='28' font-family='serif' fill='%23f5d060' text-anchor='middle' dominant-baseline='middle'%3E🏫%3C/text%3E%3C/svg%3E";
+  }
+
+  // ── Build watermark HTML ──
+  function buildWatermarkHTML() {
+    const orgLogo = logoSrc();
+    const schoolLogo = schoolLogoSrc();
+    const orgPos = getWmPositionCSS(customStyle.orgWmPosition);
+    const schoolPos = getWmPositionCSS(customStyle.schoolWmPosition);
+    const orgDisplay = shouldShowOrgLogo() ? 'block' : 'none';
+    const schoolDisplay = shouldShowSchoolLogo() ? 'block' : 'none';
+    return `<div class="card-watermark">
+      <img class="wm-org" src="${orgLogo}" style="display:${orgDisplay}; opacity:${customStyle.orgWmOpacity/100}; width:${customStyle.orgWmSize}%; height:auto; ${orgPos}" alt="">
+      <img class="wm-school" src="${schoolLogo}" style="display:${schoolDisplay}; opacity:${customStyle.schoolWmOpacity/100}; width:${customStyle.schoolWmSize}%; height:auto; ${schoolPos}" alt="">
+    </div>`;
   }
 
   // ── Build card HTML ──
@@ -1007,15 +1350,12 @@
       const qrBlock = `<div class="c-qr" id="${qrId}"></div>`;
       if (ori === 'portrait') {
         return `<div class="id-card portrait ${currentDesign}">
+          ${buildWatermarkHTML()}
           <div class="c-header">
             <div class="c-logo"><img src="${logoSrc()}"></div>
-            <div class="c-header-text"><h2>${esc(globalCompany)}</h2><p>Terms &amp; Conditions</p></div>
+            <div class="c-header-text"><h2>${esc(globalCompany)}</h2><p>${esc(globalDept)}</p></div>
           </div>
           <div class="c-body" style="flex-direction:column; gap:8px;">
-            <ul class="terms-list">
-              <li>Must be displayed at exam premises.</li>
-              <li>Non-transferable — for holder only.</li>
-            </ul>
             <table class="c-table" style="margin-top:4px;">
               ${contact ? `<tr><td>CONTACT:</td><td>${esc(contact)}</td></tr>` : ''}
               ${doj     ? `<tr><td>JOINING:</td><td>${esc(doj)}</td></tr>` : ''}
@@ -1030,16 +1370,13 @@
         </div>`;
       } else {
         return `<div class="id-card landscape ${currentDesign}">
+          ${buildWatermarkHTML()}
           <div class="c-header">
             <div class="c-logo"><img src="${logoSrc()}"></div>
-            <div class="c-header-text"><h2>${esc(globalCompany)}</h2><p>Instructions / Regulations</p></div>
+            <div class="c-header-text"><h2>${esc(globalCompany)}</h2><p>${esc(globalDept)}</p></div>
           </div>
           <div class="c-body" style="gap:10px; overflow:hidden; padding:8px 10px;">
             <div style="flex:1; display:flex; flex-direction:column; justify-content:center; gap:5px; overflow:hidden;">
-              <ul class="terms-list">
-                <li>Must be displayed at exam premises.</li>
-                <li>Non-transferable — for holder only.</li>
-              </ul>
               <table class="c-table" style="margin-top:4px;">
                 ${contact ? `<tr><td>CONTACT:</td><td>${esc(contact)}</td></tr>` : ''}
                 ${doj     ? `<tr><td>JOINING:</td><td>${esc(doj)}</td></tr>` : ''}
@@ -1069,13 +1406,13 @@
 
     if (ori === 'portrait') {
       return `<div class="id-card portrait ${currentDesign}">
+        ${buildWatermarkHTML()}
         <div class="c-header">
           <div class="c-logo"><img src="${logoSrc()}"></div>
           <div class="c-header-text"><h2>${esc(globalCompany)}</h2><p>${esc(globalDept)}</p></div>
         </div>
         <div class="c-body" style="flex-direction:column; align-items:center;">
           <div class="c-photo"><img src="${photoUrl}" alt="Photo">${photoSigHtml}</div>
-          <div class="c-card-title" style="text-align:center; width:100%; margin:6px 0 4px; letter-spacing:2px;">IDENTITY CARD</div>
           <div class="c-info" style="width:100%;">
             <table class="c-table">${tableRows}</table>
           </div>
@@ -1087,12 +1424,12 @@
       </div>`;
     } else {
       return `<div class="id-card landscape ${currentDesign}">
+        ${buildWatermarkHTML()}
         <div class="c-header">
           <div class="c-logo"><img src="${logoSrc()}"></div>
           <div class="c-header-text"><h2>${esc(globalCompany)}</h2><p>${esc(globalDept)}</p></div>
         </div>
         <div class="c-body" style="flex-direction:column; padding-bottom:4px;">
-          <div class="c-card-title" style="text-align:center; width:100%; margin-bottom:5px; letter-spacing:2px;">IDENTITY CARD</div>
           <div style="display:flex; gap:10px; flex:1; overflow:hidden;">
             <div class="c-photo"><img src="${photoUrl}" alt="Photo">${photoSigHtml}</div>
             <div class="c-info" style="justify-content:flex-start; padding-top:2px;">
@@ -1157,23 +1494,63 @@
     }, 80);
   }
 
+  // ── Render preview on Design page ──
   function renderPreviewCard() {
     const container = document.getElementById('previewContainer');
     if (!container) return;
     const extra = { cnic: "12345-1234567-1", boardId: "33345", contact: "+92 301 1234567", doj: "01-Jan-2022", address: "House #5, Block-A, Sahiwal" };
     const photoUrl = singlePhotoData || "https://placehold.co/110x120/e8f0f8/1a3c5e?text=Photo";
     const hasSig = !!authoritySigUrl;
-    const sigHtml = hasSig ? `<img src="${authoritySigUrl}">` : `<span>Authorized</span>`;
+    const sigHtml = hasSig ? `<img src="${authoritySigUrl}">` : `<span></span>`;
     const photoSig = (document.getElementById('enablePhotoSig')?.checked && hasSig) ? `<img class="photo-sig-stamp" src="${authoritySigUrl}">` : '';
 
     const front = buildCardHTML("33345","GHULAM MUHAMMAD","SUPERINTENDENT (SST)",photoUrl,photoSig,sigHtml,"front","previewQRf",extra);
     const back  = buildCardHTML("33345","GHULAM MUHAMMAD","SUPERINTENDENT (SST)",photoUrl,photoSig,sigHtml,"back","previewQRb",extra);
     container.innerHTML = `<div class="card-pair pair-${currentDesign}"><div class="pair-label">Front</div>${front}</div><div class="card-pair pair-${currentDesign}"><div class="pair-label">Back</div>${back}</div>`;
 
-    // Apply custom style to preview cards
+    container.querySelectorAll('.id-card').forEach(el => applyCustomStyleToCard(el));
+    spawnQR("previewQRb", `ID:33345 Name:GHULAM MUHAMMAD Org:${globalCompany} Inst:${globalFooter}`);
+  }
+
+  // ── Render sticky preview on Settings page ──
+  function renderSettingsPreview() {
+    const container = document.getElementById('settingsPreviewContainer');
+    if (!container) return;
+    const extra = { cnic: "12345-1234567-1", boardId: "33345", contact: "+92 301 1234567", doj: "01-Jan-2022", address: "House #5, Block-A, Sahiwal" };
+    const photoUrl = singlePhotoData || "https://placehold.co/110x120/e8f0f8/1a3c5e?text=Photo";
+    const hasSig = !!authoritySigUrl;
+    const sigHtml = hasSig ? `<img src="${authoritySigUrl}">` : `<span></span>`;
+    const photoSig = (document.getElementById('enablePhotoSig')?.checked && hasSig) ? `<img class="photo-sig-stamp" src="${authoritySigUrl}">` : '';
+
+    const front = buildCardHTML("33345","GHULAM MUHAMMAD","SUPERINTENDENT (SST)",photoUrl,photoSig,sigHtml,"front","settingsQRf",extra);
+    container.innerHTML = `<div class="card-pair pair-${currentDesign}">${front}</div>`;
+
     container.querySelectorAll('.id-card').forEach(el => applyCustomStyleToCard(el));
 
-    spawnQR("previewQRb", `ID:33345 Name:GHULAM MUHAMMAD Org:${globalCompany} Inst:${globalFooter}`);
+    // Apply header h2 inline styles for BISE
+    container.querySelectorAll('.design-bise .id-card').forEach(card => {
+      const header = card.querySelector('.c-header');
+      if (header) header.style.background = customStyle.headerBg;
+      const h2 = card.querySelector('.c-header-text h2');
+      if (h2) {
+        h2.style.fontSize = customStyle.orgSize + 'px';
+        h2.style.fontWeight = customStyle.orgWeight;
+        h2.style.color = customStyle.titleColor;
+        h2.style.fontFamily = customStyle.fontFamily;
+      }
+      const deptEl = card.querySelector('.c-header-text p');
+      if (deptEl) {
+        deptEl.style.color = customStyle.deptColor;
+        deptEl.style.fontSize = customStyle.deptSize + 'px';
+      }
+      const labelCells = card.querySelectorAll('.c-table tr td:first-child');
+      labelCells.forEach(td => td.style.color = customStyle.labelColor);
+      const footer = card.querySelector('.c-footer');
+      if (footer) footer.style.background = customStyle.footerBg;
+      const photo = card.querySelector('.c-photo');
+      if (photo) photo.style.borderColor = customStyle.accentColor;
+      card.style.borderColor = customStyle.accentColor;
+    });
   }
 
   // ── Generate All Cards ──
@@ -1236,7 +1613,6 @@
       pair.innerHTML = `<div class="pair-label" style="font-size:0.65rem;color:#888;">${esc(emp.name)} — ${esc(emp.id)}</div>${front}${back}`;
       grid.appendChild(pair);
 
-      // Apply custom styles
       pair.querySelectorAll('.id-card').forEach(el => applyCustomStyleToCard(el));
 
       const textToScan = `ID:${emp.id} Name:${emp.name} Role:${emp.designation} Org:${globalCompany} Inst:${globalFooter}`;
@@ -1277,12 +1653,14 @@
     document.getElementById('settingsPage').classList.remove('active');
     document.getElementById('navDesignBtn').classList.add('active');
     document.getElementById('navSettingsBtn').classList.remove('active');
+    renderPreviewCard();
   }
   function showSettingsPage() {
     document.getElementById('appMainPage').classList.add('hidden');
     document.getElementById('settingsPage').classList.add('active');
     document.getElementById('navDesignBtn').classList.remove('active');
     document.getElementById('navSettingsBtn').classList.add('active');
+    renderSettingsPreview();
   }
   document.getElementById('navDesignBtn').onclick = showMainPage;
   document.getElementById('navSettingsBtn').onclick = showSettingsPage;
@@ -1294,16 +1672,19 @@
     picker.addEventListener('input', () => {
       hex.value = picker.value;
       customStyle[styleKey] = picker.value;
+      renderSettingsPreview();
     });
     hex.addEventListener('input', () => {
       if (/^#[0-9a-fA-F]{6}$/.test(hex.value)) {
         picker.value = hex.value;
         customStyle[styleKey] = hex.value;
+        renderSettingsPreview();
       }
     });
   }
   bindColorPair('setTitleColor', 'setTitleColorHex', 'titleColor');
   bindColorPair('setHeaderBg', 'setHeaderBgHex', 'headerBg');
+  bindColorPair('setDeptColor', 'setDeptColorHex', 'deptColor');
   bindColorPair('setAccentColor', 'setAccentColorHex', 'accentColor');
   bindColorPair('setLabelColor', 'setLabelColorHex', 'labelColor');
   bindColorPair('setFooterBg', 'setFooterBgHex', 'footerBg');
@@ -1311,34 +1692,97 @@
   // ── Settings: font family preview ──
   document.getElementById('setFontFamily').addEventListener('change', function() {
     customStyle.fontFamily = this.value;
-    const preview = document.getElementById('fontPreviewBox');
-    preview.style.fontFamily = this.value;
+    document.getElementById('fontPreviewBox').style.fontFamily = this.value;
+    renderSettingsPreview();
   });
 
-  // ── Settings: sliders ──
+  // ── Settings: sliders with live preview ──
   document.getElementById('setOrgSize').addEventListener('input', function() {
     customStyle.orgSize = parseInt(this.value);
     document.getElementById('valOrgSize').textContent = this.value + 'px';
+    renderSettingsPreview();
   });
   document.getElementById('setNameSize').addEventListener('input', function() {
     customStyle.nameSize = parseInt(this.value);
     document.getElementById('valNameSize').textContent = this.value + 'px';
+    renderSettingsPreview();
   });
   document.getElementById('setBodySize').addEventListener('input', function() {
     customStyle.bodySize = parseInt(this.value);
     document.getElementById('valBodySize').textContent = this.value + 'px';
+    renderSettingsPreview();
+  });
+  document.getElementById('setDeptSize').addEventListener('input', function() {
+    customStyle.deptSize = parseInt(this.value);
+    document.getElementById('valDeptSize').textContent = this.value + 'px';
+    renderSettingsPreview();
+  });
+  document.getElementById('setPhotoSize').addEventListener('input', function() {
+    customStyle.photoSize = parseInt(this.value);
+    document.getElementById('valPhotoSize').textContent = this.value + 'px';
+    renderSettingsPreview();
+  });
+  document.getElementById('setPhotoHeight').addEventListener('input', function() {
+    customStyle.photoHeight = parseInt(this.value);
+    document.getElementById('valPhotoHeight').textContent = this.value + 'px';
+    renderSettingsPreview();
+  });
+  document.getElementById('setPhotoPosition').addEventListener('change', function() {
+    customStyle.photoPosition = this.value;
+    renderSettingsPreview();
   });
   document.getElementById('setOrgWeight').addEventListener('change', function() {
     customStyle.orgWeight = this.value;
+    renderSettingsPreview();
+  });
+
+  // ── Settings: watermark opacity + size + position ──
+  document.getElementById('setOrgWmOpacity').addEventListener('input', function() {
+    customStyle.orgWmOpacity = parseInt(this.value);
+    document.getElementById('valOrgWmOpacity').textContent = this.value + '%';
+    renderSettingsPreview();
+  });
+  document.getElementById('setSchoolWmOpacity').addEventListener('input', function() {
+    customStyle.schoolWmOpacity = parseInt(this.value);
+    document.getElementById('valSchoolWmOpacity').textContent = this.value + '%';
+    renderSettingsPreview();
+  });
+  document.getElementById('setOrgWmSize').addEventListener('input', function() {
+    customStyle.orgWmSize = parseInt(this.value);
+    document.getElementById('valOrgWmSize').textContent = this.value + '%';
+    renderSettingsPreview();
+  });
+  document.getElementById('setSchoolWmSize').addEventListener('input', function() {
+    customStyle.schoolWmSize = parseInt(this.value);
+    document.getElementById('valSchoolWmSize').textContent = this.value + '%';
+    renderSettingsPreview();
+  });
+  document.getElementById('setOrgWmPosition').addEventListener('change', function() {
+    customStyle.orgWmPosition = this.value;
+    renderSettingsPreview();
+  });
+  document.getElementById('setSchoolWmPosition').addEventListener('change', function() {
+    customStyle.schoolWmPosition = this.value;
+    renderSettingsPreview();
+  });
+
+  // ── Settings: logo visibility toggle ──
+  document.querySelectorAll('#logoVisibilityRow .logo-toggle-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('#logoVisibilityRow .logo-toggle-btn').forEach(b => b.classList.remove('active'));
+      this.classList.add('active');
+      customStyle.logoVisibility = this.dataset.vis;
+      renderSettingsPreview();
+    });
   });
 
   // ── Settings: apply ──
   document.getElementById('applySettingsBtn').addEventListener('click', function() {
-    // Apply custom style to all existing cards (preview + generated)
-    document.querySelectorAll('.id-card').forEach(el => applyCustomStyleToCard(el));
+    renderPreviewCard();
+    renderSettingsPreview();
+    document.querySelectorAll('#cardsOutput .id-card').forEach(el => applyCustomStyleToCard(el));
 
-    // For BISE design, update header h2 and accent colors via inline style
-    document.querySelectorAll('.design-bise .id-card').forEach(card => {
+    document.querySelectorAll('#cardsOutput .design-bise .id-card, #previewContainer .design-bise .id-card, #settingsPreviewContainer .design-bise .id-card').forEach(card => {
       const header = card.querySelector('.c-header');
       if (header) header.style.background = customStyle.headerBg;
       const h2 = card.querySelector('.c-header-text h2');
@@ -1348,21 +1792,20 @@
         h2.style.color = customStyle.titleColor;
         h2.style.fontFamily = customStyle.fontFamily;
       }
+      const deptEl = card.querySelector('.c-header-text p');
+      if (deptEl) {
+        deptEl.style.color = customStyle.deptColor;
+        deptEl.style.fontSize = customStyle.deptSize + 'px';
+      }
       const labelCells = card.querySelectorAll('.c-table tr td:first-child');
       labelCells.forEach(td => td.style.color = customStyle.labelColor);
       const footer = card.querySelector('.c-footer');
       if (footer) footer.style.background = customStyle.footerBg;
-      // Accent border on photo
       const photo = card.querySelector('.c-photo');
       if (photo) photo.style.borderColor = customStyle.accentColor;
-      // Card border
       card.style.borderColor = customStyle.accentColor;
     });
 
-    // Also update preview
-    renderPreviewCard();
-
-    // Show feedback
     const btn = this;
     const origText = btn.textContent;
     btn.textContent = '✅ Applied!';
@@ -1372,7 +1815,6 @@
   // ── Settings: reset ──
   document.getElementById('resetSettingsBtn').addEventListener('click', function() {
     customStyle = { ...defaultStyle };
-    // Update UI controls
     document.getElementById('setFontFamily').value = defaultStyle.fontFamily;
     document.getElementById('setOrgSize').value = defaultStyle.orgSize;
     document.getElementById('valOrgSize').textContent = defaultStyle.orgSize + 'px';
@@ -1381,21 +1823,43 @@
     document.getElementById('valNameSize').textContent = defaultStyle.nameSize + 'px';
     document.getElementById('setBodySize').value = defaultStyle.bodySize;
     document.getElementById('valBodySize').textContent = defaultStyle.bodySize + 'px';
+    document.getElementById('setDeptSize').value = defaultStyle.deptSize;
+    document.getElementById('valDeptSize').textContent = defaultStyle.deptSize + 'px';
+    document.getElementById('setPhotoSize').value = defaultStyle.photoSize;
+    document.getElementById('valPhotoSize').textContent = defaultStyle.photoSize + 'px';
+    document.getElementById('setPhotoHeight').value = defaultStyle.photoHeight;
+    document.getElementById('valPhotoHeight').textContent = defaultStyle.photoHeight + 'px';
+    document.getElementById('setPhotoPosition').value = defaultStyle.photoPosition;
     document.getElementById('setTitleColor').value = defaultStyle.titleColor;
     document.getElementById('setTitleColorHex').value = defaultStyle.titleColor;
     document.getElementById('setHeaderBg').value = defaultStyle.headerBg;
     document.getElementById('setHeaderBgHex').value = defaultStyle.headerBg;
+    document.getElementById('setDeptColor').value = defaultStyle.deptColor;
+    document.getElementById('setDeptColorHex').value = defaultStyle.deptColor;
     document.getElementById('setAccentColor').value = defaultStyle.accentColor;
     document.getElementById('setAccentColorHex').value = defaultStyle.accentColor;
     document.getElementById('setLabelColor').value = defaultStyle.labelColor;
     document.getElementById('setLabelColorHex').value = defaultStyle.labelColor;
     document.getElementById('setFooterBg').value = defaultStyle.footerBg;
     document.getElementById('setFooterBgHex').value = defaultStyle.footerBg;
+    document.getElementById('setOrgWmOpacity').value = defaultStyle.orgWmOpacity;
+    document.getElementById('valOrgWmOpacity').textContent = defaultStyle.orgWmOpacity + '%';
+    document.getElementById('setSchoolWmOpacity').value = defaultStyle.schoolWmOpacity;
+    document.getElementById('valSchoolWmOpacity').textContent = defaultStyle.schoolWmOpacity + '%';
+    document.getElementById('setOrgWmSize').value = defaultStyle.orgWmSize;
+    document.getElementById('valOrgWmSize').textContent = defaultStyle.orgWmSize + '%';
+    document.getElementById('setSchoolWmSize').value = defaultStyle.schoolWmSize;
+    document.getElementById('valSchoolWmSize').textContent = defaultStyle.schoolWmSize + '%';
+    document.getElementById('setOrgWmPosition').value = defaultStyle.orgWmPosition;
+    document.getElementById('setSchoolWmPosition').value = defaultStyle.schoolWmPosition;
     document.getElementById('fontPreviewBox').style.fontFamily = defaultStyle.fontFamily;
+    // Reset logo visibility buttons
+    document.querySelectorAll('#logoVisibilityRow .logo-toggle-btn').forEach(b => b.classList.remove('active'));
+    document.querySelector('#logoVisibilityRow .logo-toggle-btn[data-vis="both"]').classList.add('active');
 
-    // Re-apply
-    document.querySelectorAll('.id-card').forEach(el => applyCustomStyleToCard(el));
     renderPreviewCard();
+    renderSettingsPreview();
+    document.querySelectorAll('#cardsOutput .id-card').forEach(el => applyCustomStyleToCard(el));
   });
 
   // ── Event Bindings (Design page) ──
@@ -1409,6 +1873,7 @@
       this.classList.add('active');
       currentDesign = this.dataset.design;
       renderPreviewCard();
+      renderSettingsPreview();
     });
   });
   document.querySelectorAll('.orient-btn').forEach(b => {
@@ -1417,22 +1882,29 @@
       this.classList.add('active');
       currentOrientation = this.dataset.orient;
       renderPreviewCard();
+      renderSettingsPreview();
     });
   });
 
   ['companyName','deptName','issueDate','companyPhone'].forEach(id => {
     document.getElementById(id).addEventListener('input', updateGlobals);
   });
-  document.getElementById('enablePhotoSig').addEventListener('change', renderPreviewCard);
+  document.getElementById('enablePhotoSig').addEventListener('change', function() {
+    renderPreviewCard();
+    renderSettingsPreview();
+  });
 
   document.getElementById('logoFile').addEventListener('change', e => {
-    if (e.target.files[0]) { const r = new FileReader(); r.onload = ev => { companyLogoUrl = ev.target.result; renderPreviewCard(); }; r.readAsDataURL(e.target.files[0]); }
+    if (e.target.files[0]) { const r = new FileReader(); r.onload = ev => { companyLogoUrl = ev.target.result; renderPreviewCard(); renderSettingsPreview(); }; r.readAsDataURL(e.target.files[0]); }
+  });
+  document.getElementById('schoolLogoFile').addEventListener('change', e => {
+    if (e.target.files[0]) { const r = new FileReader(); r.onload = ev => { schoolLogoUrl = ev.target.result; renderPreviewCard(); renderSettingsPreview(); }; r.readAsDataURL(e.target.files[0]); }
   });
   document.getElementById('sigFile').addEventListener('change', e => {
-    if (e.target.files[0]) { const r = new FileReader(); r.onload = ev => { authoritySigUrl = ev.target.result; renderPreviewCard(); }; r.readAsDataURL(e.target.files[0]); }
+    if (e.target.files[0]) { const r = new FileReader(); r.onload = ev => { authoritySigUrl = ev.target.result; renderPreviewCard(); renderSettingsPreview(); }; r.readAsDataURL(e.target.files[0]); }
   });
   document.getElementById('singlePhotoFile').addEventListener('change', e => {
-    if (e.target.files[0]) { const r = new FileReader(); r.onload = ev => { singlePhotoData = ev.target.result; renderPreviewCard(); }; r.readAsDataURL(e.target.files[0]); }
+    if (e.target.files[0]) { const r = new FileReader(); r.onload = ev => { singlePhotoData = ev.target.result; renderPreviewCard(); renderSettingsPreview(); }; r.readAsDataURL(e.target.files[0]); }
   });
   document.getElementById('photoFiles').addEventListener('change', e => {
     uploadedPhotosMap = {};
